@@ -1,127 +1,54 @@
-const btnInsert = document.getElementById("btnInsert");
-const btnClearEntry = document.getElementById("btnClearEntry");
-const btnClearItems = document.getElementById("btnClearItems");
-const btnGetTotal = document.getElementById("btnGetTotal");
-const btnIdentify = document.getElementById("btnIdentify");
+const btnInsert = document.getElementById("btn1");
+const btnClearEntry = document.getElementById("btn2");
+const btnClearItems = document.getElementById("btn3");
+const btnGetTotal = document.getElementById("btn4");
+const btnShowHighestLowest = document.getElementById("btn5");
 const sortSelect = document.getElementById("sortSelect");
 
 const tbl = document.getElementById("tblNumbers");
+const highestDisplay = document.getElementById("highest");
+const lowestDisplay = document.getElementById("lowest");
+const highestLowestSection = document.getElementById("highestLowest");
 
 let numbersArr = [];
 let total = 0;
 
-// Insert number into the array
-function insertNumber() {
-    const txtNum = document.getElementById("txtNum").value;
-    const regex = /^[0-9]+$/;
+// Insert a number
+btnInsert.addEventListener("click", insertNumber);
+document.getElementById("txtNum").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") insertNumber();
+});
 
-    if (txtNum.match(regex)) {
-        let num = parseInt(txtNum);
-        numbersArr.push(num);
-        document.getElementById("txtNum").value = "";
-    } else {
-        alert("Please input a valid positive number.");
-        document.getElementById("txtNum").value = "";
-        return;
-    }
-
-    displayNumbers();
-}
-
-// Display all numbers in the table
-function displayNumbers() {
-    tbl.innerHTML = ""; // Clear existing rows
-    total = 0;
-
-    if (numbersArr.length > 0) {
-        numbersArr.forEach((num, i) => {
-            const tr = document.createElement("tr");
-            const tdNum = document.createElement("td");
-            const tdType = document.createElement("td");
-            const tdRemove = document.createElement("td");
-            const tdEdit = document.createElement("td");
-
-            tdNum.innerText = num;
-            tdType.innerText = num % 2 === 0 ? "EVEN" : "ODD";
-            tdType.style.color = num % 2 === 0 ? "green" : "blue";
-
-            // Remove Button
-            const btnRemove = document.createElement("button");
-            btnRemove.innerText = "Remove";
-            btnRemove.onclick = () => removeNumber(i);
-
-            // Edit Button
-            const btnEdit = document.createElement("button");
-            btnEdit.innerText = "Edit";
-            btnEdit.onclick = () => editNumber(i);
-
-            tdRemove.appendChild(btnRemove);
-            tdEdit.appendChild(btnEdit);
-
-            tr.appendChild(tdNum);
-            tr.appendChild(tdType);
-            tr.appendChild(tdRemove);
-            tr.appendChild(tdEdit);
-
-            tbl.appendChild(tr);
-
-            total += num;
-        });
-
-        // Display highest and lowest values
-        document.getElementById("highest").innerText = Math.max(...numbersArr);
-        document.getElementById("lowest").innerText = Math.min(...numbersArr);
-    } else {
-        document.getElementById("highest").innerText = "-";
-        document.getElementById("lowest").innerText = "-";
-    }
-}
-
-// Remove number from the array
-function removeNumber(index) {
-    numbersArr.splice(index, 1);
-    displayNumbers();
-}
-
-// Edit a number in the array
-function editNumber(index) {
-    const newValue = prompt("Enter new number:", numbersArr[index]);
-    const regex = /^[0-9]+$/;
-
-    if (newValue && newValue.match(regex)) {
-        numbersArr[index] = parseInt(newValue);
-        displayNumbers();
-    } else {
-        alert("Invalid input. Please enter a positive number.");
-    }
-}
-
-// Clear the input field
+// Clear entry
 btnClearEntry.addEventListener("click", () => {
     document.getElementById("txtNum").value = "";
 });
 
-// Clear all numbers from the array
+// Clear all items
 btnClearItems.addEventListener("click", () => {
     numbersArr = [];
     displayNumbers();
+    highestLowestSection.style.display = "none";
 });
 
-// Get the total of all numbers
+// Get total
 btnGetTotal.addEventListener("click", () => {
     alert(`Total of Numbers: ${total}`);
 });
 
-// Identify highest and lowest numbers
-btnIdentify.addEventListener("click", () => {
+// Show highest and lowest
+btnShowHighestLowest.addEventListener("click", () => {
     if (numbersArr.length > 0) {
-        alert(`Highest: ${Math.max(...numbersArr)}\nLowest: ${Math.min(...numbersArr)}`);
+        highestLowestSection.style.display = "block";
+        highestDisplay.textContent = Math.max(...numbersArr);
+        lowestDisplay.textContent = Math.min(...numbersArr);
     } else {
-        alert("No numbers to analyze.");
+        alert("No numbers inserted yet!");
+        highestLowestSection.style.display = "none";
     }
 });
 
-// Sort numbers based on selection
+// Sorting options
 sortSelect.addEventListener("change", () => {
     if (sortSelect.value === "Ascending") {
         numbersArr.sort((a, b) => a - b);
@@ -131,9 +58,76 @@ sortSelect.addEventListener("change", () => {
     displayNumbers();
 });
 
-// Add event listener to insert number on button click or 'Enter' key
-btnInsert.addEventListener("click", insertNumber);
-document.getElementById("txtNum").addEventListener("keydown", (event) => {
-    if (event.key === "Enter") insertNumber();
-});
+// Insert number function
+function insertNumber() {
+    const inputField = document.getElementById("txtNum");
+    const num = parseInt(inputField.value);
 
+    if (!isNaN(num) && num > 0) {
+        numbersArr.push(num);
+        inputField.value = "";
+        displayNumbers();
+        highestLowestSection.style.display = "none"; // Hide when inserting new data
+    } else {
+        alert("Please enter a valid positive number.");
+        inputField.value = "";
+    }
+}
+
+// Display numbers
+function displayNumbers() {
+    tbl.innerHTML = "";
+    total = 0;
+
+    numbersArr.forEach((num, index) => {
+        const tr = document.createElement("tr");
+        const tdNumber = document.createElement("td");
+        const tdType = document.createElement("td");
+        const tdActions = document.createElement("td");
+
+        tdNumber.textContent = num;
+        tdType.textContent = num % 2 === 0 ? "EVEN" : "ODD";
+        tdType.className = num % 2 === 0 ? "even" : "odd";
+
+        // Remove and Edit buttons
+        const btnRemove = document.createElement("button");
+        btnRemove.textContent = "Remove";
+        btnRemove.addEventListener("click", () => removeNumber(index));
+
+        const btnEdit = document.createElement("button");
+        btnEdit.textContent = "Edit";
+        btnEdit.addEventListener("click", () => editNumber(index));
+
+        tdActions.appendChild(btnRemove);
+        tdActions.appendChild(btnEdit);
+
+        tr.appendChild(tdNumber);
+        tr.appendChild(tdType);
+        tr.appendChild(tdActions);
+
+        tbl.appendChild(tr);
+        total += num;
+    });
+
+    btnGetTotal.style.display = numbersArr.length ? "inline" : "none";
+    highestLowestSection.style.display = "none"; // Hide when list is updated
+}
+
+// Remove number
+function removeNumber(index) {
+    numbersArr.splice(index, 1);
+    displayNumbers();
+}
+
+// Edit number
+function editNumber(index) {
+    const newValue = prompt("Enter new value:", numbersArr[index]);
+    const num = parseInt(newValue);
+
+    if (!isNaN(num) && num > 0) {
+        numbersArr[index] = num;
+        displayNumbers();
+    } else {
+        alert("Please enter a valid positive number.");
+    }
+}

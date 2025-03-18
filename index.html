@@ -1,22 +1,76 @@
-<h2>Javascript Web Output #1</h2>
-<p>Insert any Positive Numbers:</p>
-<input type="text" id="txtNum" placeholder="Enter a number">
-<button id="btnInsert">Insert</button>
-<button id="btnClearEntry">Clear Entry</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Web Output #1</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        table {
+            margin-bottom: 10px;
+        }
+        fieldset {
+            margin-bottom: 10px;
+        }
+        td {
+            padding: 5px;
+        }
+        .even {
+            color: green;
+        }
+        .odd {
+            color: blue;
+        }
+        select {
+            margin-top: 10px;
+            padding: 5px;
+        }
+        #highestLowest {
+            display: none;
+            margin-top: 10px;
+        }
+</head>
+<body>
+    <h1>Javascript Web Output #1</h1>
+    <table>
+        <tr>
+            <td>Insert any Positive Numbers:</td>
+            <td><input type="text" id="txtNum"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button id="btn1">Insert</button>
+                <button id="btn2">Clear Entry</button>
+            </td>
+        </tr>
+    </table>
 
-<h3>Inserted Numbers</h3>
-<table id="tblNumbers"></table>
+    <fieldset>
+        <legend>Inserted Numbers</legend>
+        <table id="tblNumbers"></table>
 
-<p>HIGHEST: <span id="highest">-</span></p>
-<p>LOWEST: <span id="lowest">-</span></p>
+        <div id="highestLowest">
+            <p>HIGHEST: <span id="highest">-</span></p>
+            <p>LOWEST: <span id="lowest">-</span></p>
+        </div>
+    </fieldset>
 
-<button id="btnClearItems">Clear Items</button>
-<button id="btnGetTotal">Get Total</button>
-<button id="btnIdentify">Identify Highest and Lowest Number</button>
+    <button id="btn3">Clear Items</button>
+    <button id="btn4" style="display: none;">Get Total</button>
+    <button id="btn5">Identify Highest and Lowest Number</button>
 
-<label for="sortSelect">Sort by:</label>
-<select id="sortSelect">
-    <option value="Please Select">Please select</option>
-    <option value="Ascending">Ascending</option>
-    <option value="Descending">Descending</option>
-</select>
+    
+
+    <label for="sortSelect">Sort by:</label>
+    <select id="sortSelect">
+        <option value="">Please select</option>
+        <option value="Ascending">Ascending</option>
+        <option value="Descending">Descending</option>
+    </select>
+
+    <script src="main.js"></script>
+</body>
+</html>
